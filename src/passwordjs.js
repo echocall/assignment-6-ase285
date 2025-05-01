@@ -1,6 +1,5 @@
 'use strict'
 const fs = require('fs');
-const util = require('./utility')
 const makePassword = require('.makepassword')
 const {hash, readFile} = require("./utility");
 

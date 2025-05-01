@@ -6,8 +6,8 @@
 // For unit tests, you don't have to have a large input in the beginning.
 // Start with smallest input, and add more contents in the input
 
-const p = require('../src/makepassword');
-const { readFile, writeFile, hash, checkExists} = require('./utility')
+const {makepassword} = require('../src/makepassword');
+const { readFile, writeFile, hash, checkExists} = require('../src/utility')
 const fs = require('fs');
 
 /*
@@ -19,6 +19,23 @@ test('Check toHash(): if the email:password is converted into email:hashPassword
     expect(p.toHash(input)).toBe(output);
 });
 */
+describe('Test checkExists(): does it return Found or Not Found for a password?', () => {
+    test('', () => {
+        const fileTest = 'passwordTest.txt'
+        const notFile = 'peanuts.txt'
+
+        let testFileExists = ''
+        let testNotExists = ''
+
+        testFileExists = checkExists(fileTest)
+        console.log("Does " + fileTest + " Exists?")
+        console.log(testFileExists)
+
+        testNotExists = checkExists(notFile)
+        console.log("Does " + notFile + " Exists?")
+        console.log(testNotExists)
+    })
+})
 
 describe("makepassword should create file", () => {
     test('',() => {
@@ -33,7 +50,7 @@ describe("makepassword should create file", () => {
         console.log("Does " + fileName + " exist before running makepassword?")
         console.log(testPassExists)
         
-        p.makepassword(fileName, encFileName)
+        makepassword(fileName, encFileName)
 
         // 2. Make sure password.enc.txt does exist after running the function.
         console.log("Does " + encFileName + " exist after running makepassword?")

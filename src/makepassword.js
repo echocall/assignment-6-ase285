@@ -46,18 +46,15 @@ function makepassword(passwordFileName, passwordEncFileName) {
         outputFileExists = checkExists(passwordFileName);
 
         if (outputFileExists === 'Found') {
-            try {
-
-            } catch {
-
-            }
+            console.log("Error: Output file already exists!")
         } else {
             // file not found, we can write it.
            try {
                // write encrypted out to file.
                writeFile(outputValues, passwordEncFileName);
+               console.log("File wrote successfully!")
            } catch {
-               console.log("Error writing to " + passwordFileName);
+               console.log("Error: Failed to write to " + passwordFileName);
            }
         }
 
@@ -70,4 +67,4 @@ if (require.main === module) {
     makepassword('./password.txt', './password.enc.txt')
 }
 
-module.exports = makepassword;
+module.exports = {makepassword};
