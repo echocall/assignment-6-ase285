@@ -29,4 +29,13 @@ function hash(input) {
     return createHash('sha256').update(input).digest('hex'); // never use md5
 }
 
-module.exports = {readFile, writeFile, hash};
+function checkExists(fileName) {
+    try {
+        fs.accessSync(fileName);
+        return 'Found';
+    } catch {
+        return 'Not Found';
+    }
+}
+
+module.exports = {readFile, writeFile, hash, checkExists};

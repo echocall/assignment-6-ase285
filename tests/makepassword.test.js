@@ -7,7 +7,7 @@
 // Start with smallest input, and add more contents in the input
 
 const p = require('../src/makepassword');
-const u = require('../src/utility');
+const { readFile, writeFile, hash, checkExists} = require('./utility')
 const fs = require('fs');
 
 /*
@@ -26,14 +26,20 @@ describe("makepassword should create file", () => {
         const encFileName = './tests/passwordtest.enc.txt'
 
         // 1. Make sure password.enc.txt does not exist before running the function.
-        ???
+        let testPassExists = ''
+        let testEncExists = ''
+
+        testPassExists = checkExists(fileName)
+        console.log("Does " + fileName + " exist before running makepassword?")
+        console.log(testPassExists)
         
         p.makepassword(fileName, encFileName)
 
         // 2. Make sure password.enc.txt does exist after running the function.
-        ???
-
+        console.log("Does " + encFileName + " exist after running makepassword?")
+        testEncExists = checkExists(encFileName)
+        console.log(testEncExists)
         // 3. Make sure the contents of password.enc.txt has correct contents.
-        ???
+
     })
 })
