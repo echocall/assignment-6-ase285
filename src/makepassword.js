@@ -1,29 +1,7 @@
 'use strict'
 const fs = require('fs');
 const {readFile, writeFile, hash, checkExists} = require('./utility')
-const mongoose = require('mongoose')
-
-
-function connectMongoose(infoToSave) {
-// Connect to MongoDB (replace with your actual connection string)
-    mongoose.connect('mongodb://localhost:27017/mydatabase', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
-
-// Define a schema
-    const loginSchema = new mongoose.Schema({
-        email: String,
-        password: String
-    });
-
-// Create a model
-    const User = mongoose.model('Login', loginSchema);
-
-
-
-}
-
+const {saveLogin} = require('./saveLogin');
 
 function makepassword(passwordFileName, passwordEncFileName) {
     // read file in. File will be returned as an array of lines.
@@ -39,7 +17,7 @@ function makepassword(passwordFileName, passwordEncFileName) {
         try{
             inputValues = readFile(passwordFileName)
         } catch {
-            console.log("Error reading file!")
+            console.log("Error: Problem reading file!")
         }
 
         // split the data further on the : to get passwords and convert them.
@@ -61,12 +39,12 @@ function makepassword(passwordFileName, passwordEncFileName) {
                 outputValues.push(splitArray[0] + ":" + encodedPassword)
 
             } catch {
-                console.log("Error hashing the passwords!")
+                console.log("Error: Problem hashing the passwords!")
             }
         }
 
         // check if encrypted file exists
-        outputFileExists = checkExists(passwordFileName);
+        outputFileExists = checkExists(passwordEncFileName);
 
         if (outputFileExists === 'Found') {
             console.log("Error: Output file already exists!")
@@ -75,9 +53,18 @@ function makepassword(passwordFileName, passwordEncFileName) {
            try {
                // write encrypted out to file.
                writeFile(outputValues, passwordEncFileName);
-               console.log("File wrote successfully!")
+               console.log("Success: File wrote successfully!")
+
+               try{
+                   const results = saveLogin(outputValues)
+                   console.log("Results saving to mongodb: ")
+                   console.log(results)
+               } catch (err) {
+                   console.log("Error: Problem with saving to MongoDB: ", err)
+               }
+
            } catch {
-               console.log("Error: Failed to write to " + passwordFileName);
+               console.log("Error: Failed to write to ", passwordFileName);
            }
         }
 

@@ -1,6 +1,6 @@
 'use strict'
 const fs = require('fs');
-const makePassword = require('.makepassword')
+const makePassword = require('./makepassword')
 const {hash, readFile} = require("./utility");
 
 function passwordjs() {
@@ -27,6 +27,7 @@ function passwordjs() {
     // return comparison result
     foundResult = indexFound !== -1;
     console.log(foundResult)
+    return foundResult
 }
 
 if (require.main === module) {

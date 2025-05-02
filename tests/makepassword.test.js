@@ -38,25 +38,55 @@ describe('Test checkExists(): does it return Found or Not Found for a password?'
 })
 
 describe("makepassword should create file", () => {
-    test('',() => {
-        const fileName = './tests/passwordtest.txt'
-        const encFileName = './tests/passwordtest.enc.txt'
+    const inputFile = './tests/passwordtest.txt';
+    const outputFile = './tests/passwordtest.enc.txt';
 
-        // 1. Make sure password.enc.txt does not exist before running the function.
-        let testPassExists = ''
-        let testEncExists = ''
+    beforeAll(() => {
+        if (fs.existsSync(outputFile)) {
+            // remove previous output
+            fs.unlinkSync(outputFile);
+        }
+    });
 
-        testPassExists = checkExists(fileName)
-        console.log("Does " + fileName + " exist before running makepassword?")
-        console.log(testPassExists)
-        
-        makepassword(fileName, encFileName)
+    test("generates correct hashed output", () => {
+        // Call the function
+        makepassword(inputFile, outputFile);
 
-        // 2. Make sure password.enc.txt does exist after running the function.
-        console.log("Does " + encFileName + " exist after running makepassword?")
-        testEncExists = checkExists(encFileName)
-        console.log(testEncExists)
-        // 3. Make sure the contents of password.enc.txt has correct contents.
+        //  Read and check file exists
+        expect(fs.existsSync(outputFile)).toBe(true);
 
-    })
-})
+        // Read contents
+        const outputLines = fs.readFileSync(outputFile, 'utf-8').split('\n').filter(Boolean);
+
+        // Compare to expected
+        const expectedHash = hash('mypassword');
+        const expectedLine = `alan.may@best.com:${expectedHash}`;
+        expect(outputLines).toContain(expectedLine);
+
+    });
+
+    test('returns true for valid email and password', () => {
+        process.argv = ['node', 'passwordjs.js', encodedFile, 'sm.cho@hello.com', '123456'];
+        expect(passwordjs()).toBe(true);
+    });
+
+    test('returns false for correct email but incorrect password', () => {
+        process.argv = ['node', 'passwordjs.js', encodedFile, 'sm.cho@hello.com', 'wrongpassword'];
+        expect(passwordjs()).toBe(false);
+    });
+
+    test('returns false for unknown email', () => {
+        process.argv = ['node', 'passwordjs.js', encodedFile, 'not.in.db@example.com', '123456'];
+        expect(passwordjs()).toBe(false);
+    });
+
+    test('returns false for email without password', () => {
+        process.argv = ['node', 'passwordjs.js', encodedFile, 'sm.cho@hello.com'];
+        expect(passwordjs()).toBe('false'); // returns string 'false' on invalid argument count
+    });
+
+    afterAll(() => {
+        // Cleanup
+        if (fs.existsSync(encodedFile)) fs.unlinkSync(encodedFile);
+    });
+});
