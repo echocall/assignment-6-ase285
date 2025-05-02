@@ -1,6 +1,29 @@
 'use strict'
 const fs = require('fs');
 const {readFile, writeFile, hash, checkExists} = require('./utility')
+const mongoose = require('mongoose')
+
+
+function connectMongoose(infoToSave) {
+// Connect to MongoDB (replace with your actual connection string)
+    mongoose.connect('mongodb://localhost:27017/mydatabase', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+
+// Define a schema
+    const loginSchema = new mongoose.Schema({
+        email: String,
+        password: String
+    });
+
+// Create a model
+    const User = mongoose.model('Login', loginSchema);
+
+
+
+}
+
 
 function makepassword(passwordFileName, passwordEncFileName) {
     // read file in. File will be returned as an array of lines.
