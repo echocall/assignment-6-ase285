@@ -32,9 +32,9 @@ function hash(input) {
 function checkExists(fileName) {
     try {
         fs.accessSync(fileName);
-        return 'Found';
+        return true;
     } catch {
-        return 'Not Found';
+        return false;
     }
 }
 

@@ -13,7 +13,7 @@ function makepassword(passwordFileName, passwordEncFileName) {
     inputFileExists = checkExists(passwordFileName);
 
     console.log("File status: " + inputFileExists);
-    if (inputFileExists === 'Found'){
+    if (inputFileExists === true){
         try{
             inputValues = readFile(passwordFileName)
         } catch {
@@ -46,7 +46,7 @@ function makepassword(passwordFileName, passwordEncFileName) {
         // check if encrypted file exists
         outputFileExists = checkExists(passwordEncFileName);
 
-        if (outputFileExists === 'Found') {
+        if (outputFileExists === true) {
             console.log("Error: Output file already exists!")
         } else {
             // file not found, we can write it.
@@ -69,12 +69,12 @@ function makepassword(passwordFileName, passwordEncFileName) {
         }
 
     } else {
-        console.log( "No file to read. Please try running the program gain.")
+        console.log( "No file to read. Please check file exists, then try again.")
     }
 }
 
 if (require.main === module) {
-    makepassword('./password.txt', './password.enc.txt')
+    makepassword('../password.txt', '../password.enc.txt')
 }
 
 module.exports = {makepassword};

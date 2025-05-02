@@ -21,7 +21,7 @@ function passwordjs() {
 
     // compare email and password to data within the password.enc.txt file
     emailPassword = email + ":" + hashedPassword;
-    encValues = readFile('password.enc.txt')
+    encValues = readFile(filename)
     indexFound = encValues.indexOf(emailPassword);
 
     // return comparison result
@@ -31,7 +31,7 @@ function passwordjs() {
 }
 
 if (require.main === module) {
-    console.log(passwordjs()) // print out true or false
+    console.log(passwordjs())
 }
 
 module.exports = passwordjs;
